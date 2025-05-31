@@ -41,7 +41,7 @@ ENV PATH="/root/go/bin:${PATH}"
 
 # Install Git-based tools
 RUN git clone https://github.com/RedSiege/EyeWitness /app/EyeWitness && \
-    pip install -r /app/EyeWitness/Python/requirements.txt
+    pip install -r /app/EyeWitness/Python/setup/requirements.txt
 RUN git clone https://github.com/m4ll0k/SecretFinder /app/SecretFinder
 RUN git clone https://github.com/maurosoria/dirsearch /app/dirsearch
 RUN git clone https://github.com/sqlmapproject/sqlmap /app/sqlmap
