@@ -16,6 +16,7 @@ TARGET_DOMAIN = ""
 OUTPUT_DIR = "bug_bounty_output"
 REPORT_PDF = os.path.join(OUTPUT_DIR, "bug_bounty_report.pdf")
 TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S")
+SUBFINDER_CONFIG = "/root/.config/subfinder/config.yaml"  # Path to config.yaml in Docker
 
 # Ensure output directory exists
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -68,7 +69,7 @@ def recon_workflow(target):
     assetfinder_out = os.path.join(OUTPUT_DIR, f"assetfinder_{TIMESTAMP}.txt")
     subdomains_out = os.path.join(OUTPUT_DIR, f"subdomains_{TIMESTAMP}.txt")
 
-    run_command(f"subfinder -d {target} -o {subfinder_out}")
+    run_command(f"subfinder -d {target} -o {subfinder_out} -config {SUBFINDER_CONFIG}")
     run_command(f"assetfinder {target} > {assetfinder_out}")
 
     # Combine and deduplicate subdomains
