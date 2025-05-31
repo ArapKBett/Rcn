@@ -18,7 +18,7 @@ ENV PATH="/usr/local/go/bin:/root/go/bin:${PATH}"
 RUN go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@v2.7.1
 RUN go install github.com/tomnomnom/assetfinder@latest
 RUN go install github.com/projectdiscovery/httpx/cmd/httpx@latest
-RUN go install github.com/pentestpad/subzy@latest
+RUN go install github.com/PentestPad/subzy@latest
 RUN go install github.com/haccer/subjack@latest
 RUN go install github.com/projectdiscovery/katana/cmd/katana@latest
 RUN go install github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
@@ -52,9 +52,20 @@ RUN apt-get update && apt-get install -y \
     firefox-esr \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy Subfinder config file and set permissions
+# Create Subfinder config directory and default config.yaml if not provided
 RUN mkdir -p /root/.config/subfinder
-COPY config.yaml /root/.config/subfinder/config.yaml
+RUN if [ ! -f config.yaml ]; then \
+        echo "# Subfinder configuration file (default, add API keys)" > /root/.config/subfinder/config.yaml && \
+        echo "censys:" >> /root/.config/subfinder/config.yaml && \
+        echo "  - id: \"your-censys-id\"" >> /root/.config/subfinder/config.yaml && \
+        echo "    secret: \"your-censys-secret\"" >> /root/.config/subfinder/config.yaml && \
+        echo "shodan:" >> /root/.config/subfinder/config.yaml && \
+        echo "  - \"your-shodan-api-key\"" >> /root/.config/subfinder/config.yaml && \
+        echo "virustotal:" >> /root/.config/subfinder/config.yaml && \
+        echo "  - \"your-virustotal-api-key\"" >> /root/.config/subfinder/config.yaml; \
+    else \
+        cp config.yaml /root/.config/subfinder/config.yaml; \
+    fi
 RUN chmod 600 /root/.config/subfinder/config.yaml
 
 # Expose Flask port
