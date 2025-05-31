@@ -69,7 +69,14 @@ def recon_workflow(target):
     assetfinder_out = os.path.join(OUTPUT_DIR, f"assetfinder_{TIMESTAMP}.txt")
     subdomains_out = os.path.join(OUTPUT_DIR, f"subdomains_{TIMESTAMP}.txt")
 
-    run_command(f"subfinder -d {target} -o {subfinder_out} -config {SUBFINDER_CONFIG}")
+    # Check if config.yaml exists for Subfinder
+    subfinder_cmd = f"subfinder -d {target} -o {subfinder_out}"
+    if os.path.exists(SUBFINDER_CONFIG):
+        subfinder_cmd += f" -config {SUBFINDER_CONFIG}"
+    else:
+        print(f"Warning: {SUBFINDER_CONFIG} not found, running Subfinder without API keys.")
+    run_command(subfinder_cmd)
+
     run_command(f"assetfinder {target} > {assetfinder_out}")
 
     # Combine and deduplicate subdomains
@@ -179,9 +186,9 @@ def download_report():
         return send_file(REPORT_PDF, as_attachment=True)
     return "Report not found.", 404
 
-if __name__ == '__main__':
-    # Local execution
-    target = input("Enter target domain: ")
-    recon_workflow(target)
-    # Uncomment to run Flask locally
-    # app.run(debug=True)
+if __name__ == "__main__":
+    # For Render deployment, run the Flask server
+    app.run(host='0.0.0.0', port=5000)
+    # For local testing with interactive input, uncomment the following:
+    # target = input("Enter target domain: ")
+    # recon_workflow(target)
