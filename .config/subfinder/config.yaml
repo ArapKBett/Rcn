@@ -1,0 +1,21 @@
+# Subfinder configuration file for API keys
+censys:
+  - id: "your-censys-id"
+    secret: "your-censys-secret"
+shodan:
+  - "your-shodan-api-key"
+virustotal:
+  - "your-virustotal-api-key"
+passivetotal:
+  - username: "your-passivetotal-username"
+    key: "your-passivetotal-key"
+securitytrails:
+  - "your-securitytrails-api-key"
+binaryedge:
+  - "your-binaryedge-api-key"
+chaos:
+  - "your-chaos-api-key"
+recon:
+  - "your-recon-dev-api-key"
+github:
+  - "your-github-token"
